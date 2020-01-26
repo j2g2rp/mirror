@@ -4,6 +4,12 @@ Make up mirror
 
 ## Running
 
+### Stable release
+
+You can use the stable release from the [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/mirror.brouits)
+
+### From sources
+
 You must have a smartphone with Ubuntu Touch (from ubports.com) as Operating System.
 You must have a properly installed `clickable` package and `adb` and `docker.io`
 
