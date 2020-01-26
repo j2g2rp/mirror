@@ -2,6 +2,15 @@
 
 Make up mirror
 
+## Running
+
+You must have a smartphone with Ubuntu Touch (from ubports.com) as Operating System.
+You must have a properly installed `clickable` package and `adb` and `docker.io`
+
+- connect your phone to your PC with an USB Cable;
+- on your PC, in a terminal (xterm, etc...) change directory to the git repo;
+- type `clickable` and wait on your phone's screen. That's it.
+
 ## License
 
 Copyright (C) 2020  Benoît Rouits
