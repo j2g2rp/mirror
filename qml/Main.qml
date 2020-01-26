@@ -52,10 +52,9 @@ MainView {
             flash.mode: Camera.FlashOff
         }
 
-        VideoOutput {
-            id: videoOutput
-            autoOrientation: true
-            fillMode: preserveAspectCrop
+        Rectangle {
+            color: "pink"
+            radius: units.gu(1)
             anchors {
               top: header.bottom
               bottom: parent.bottom
@@ -63,10 +62,25 @@ MainView {
               right: parent.right
             }
 
-            source: camera
-            anchors.fill: parent
+            border {
+                width: units.gu(2)
+                color: "pink"
+            }
+
+            VideoOutput {
+                id: videoOutput
+
+                anchors {
+                    margins: units.gu(2)
+                    fill: parent
+                }
+
+                autoOrientation: true
+                fillMode: VideoOutput.PreserveAspectCrop
+                source: camera
             
-            focus : visible
+                focus : visible
+            }
         }
     }
 }
