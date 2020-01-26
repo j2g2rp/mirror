@@ -6,7 +6,7 @@ Make up mirror
 
 ### Stable release
 
-You can use the stable release from the [![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/mirror.brouits)
+[![OpenStore](https://open-store.io/badges/en_US.png)](https://open-store.io/app/mirror.brouits)
 
 ### From sources
 
