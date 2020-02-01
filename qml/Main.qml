@@ -99,7 +99,7 @@ MainView {
                     onCaptureFailed: {
                         snapshotItems = []
                         clock.visible = false
-                        info.text = i18n.tr("Unable to take snapshot!")
+                        info.text = i18n.tr("Unable to save snapshot!")
                         photoPreview.visible = true
                     }
                 }
@@ -172,7 +172,7 @@ MainView {
                         if (root.exportRequested) {
                             root.exportTransfer.items = snapshotItems
                             root.exportTransfer.state = ContentTransfer.Charged
-                        } else {
+                        } else if (snapshotItems.length > 0) {
                             pages.push(sharePage)
                         }
                     }

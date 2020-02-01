@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mirror.brouits\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-01 09:24+0000\n"
+"POT-Creation-Date: 2020-02-01 09:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -30,7 +30,7 @@ msgid "Share your snapshot!"
 msgstr ""
 
 #: ../qml/Main.qml:102
-msgid "Unable to take snapshot!"
+msgid "Unable to save snapshot!"
 msgstr ""
 
 #: ../qml/Main.qml:205
