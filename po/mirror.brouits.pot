@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mirror.brouits\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-01-26 02:24+0000\n"
+"POT-Creation-Date: 2020-02-01 01:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,26 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../qml/Main.qml:41 mirror.desktop.in.h:1
+#: ../qml/Main.qml:45 mirror.desktop.in.h:1
 msgid "Mirror"
+msgstr ""
+
+#: ../qml/Main.qml:49
+msgid "Settings"
+msgstr ""
+
+#: ../qml/Main.qml:72
+msgid "Snapshot saved in Pictures folder!"
+msgstr ""
+
+#: ../qml/Main.qml:77
+msgid "Unable to save snapshot!"
+msgstr ""
+
+#: ../qml/Main.qml:175
+msgid "Preferences"
+msgstr ""
+
+#: ../qml/Main.qml:176
+msgid "Mirror frame color:"
 msgstr ""

@@ -15,8 +15,10 @@
  */
 
 import QtQuick 2.7
+import QtQml 2.2
 import QtQuick.Window 2.2
 import Ubuntu.Components 1.3
+import Ubuntu.Components.Popups 1.3
 //import QtQuick.Controls 2.2
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
@@ -28,17 +30,28 @@ MainView {
     applicationName: 'mirror.brouits'
     automaticOrientation: true
 
-    //width: units.gu(45)
-    //height: units.gu(75)
-
     anchors.fill: parent
+
+    Settings {
+        id: settings
+        property alias frame: frame.color
+    }
 
     Page {
         anchors.fill: parent
 
         header: PageHeader {
-          id: header
-          title: i18n.tr('Mirror')
+            id: header
+            title: i18n.tr('Mirror')
+            trailingActionBar.actions: [
+                Action {
+                    iconName: "settings"
+                    text: i18n.tr("Settings")
+                    onTriggered: {
+                        PopupUtils.open(dialog)
+                    }
+                }
+            ]
         }
 
         Camera {
@@ -46,25 +59,41 @@ MainView {
             position: Camera.FrontFace
             imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
             exposure {
-              exposureCompensation: -1.0
-              exposureMode: Camera.ExposurePortrait
+                exposureCompensation: -1.0
+                exposureMode: Camera.ExposurePortrait
             }
+
             flash.mode: Camera.FlashOff
+
+            imageCapture {
+                onImageCaptured: {
+                    clock.visible = false
+                    photoPreview.source = preview
+                    info.text = i18n.tr("Snapshot saved in Pictures folder!")
+                    photoPreview.visible = true
+                }
+                onCaptureFailed: {
+                    clock.visible = false
+                    info.text = i18n.tr("Unable to save snapshot!")
+                    photoPreview.visible = true
+                }
+            }
         }
 
         Rectangle {
+            id: frame
             color: "pink"
-            radius: units.gu(1)
+            radius: units.gu(2)
             anchors {
-              top: header.bottom
-              bottom: parent.bottom
-              left: parent.left
-              right: parent.right
+                top: header.bottom
+                bottom: parent.bottom
+                left: parent.left
+                right: parent.right
             }
 
             border {
                 width: units.gu(2)
-                color: "pink"
+                color: frame.color
             }
 
             VideoOutput {
@@ -78,8 +107,99 @@ MainView {
                 autoOrientation: true
                 fillMode: VideoOutput.PreserveAspectCrop
                 source: camera
-            
-                focus : visible
+                visible: !photoPreview.visible
+
+                MultiPointTouchArea {
+                    anchors.fill: parent
+                    maximumTouchPoints: 2
+                    minimumTouchPoints: 1
+                    mouseEnabled: true
+
+                    onReleased: {
+                        clock.visible = true;
+                        timer.start()
+                    }
+                }
+            }
+        }
+
+        Image {
+            id: photoPreview
+            anchors.fill: parent
+            fillMode: Image.PreserveAspectCrop
+            visible: false
+
+            Text {
+                id: info
+                anchors.centerIn: parent
+                font.pixelSize: units.gu(3)
+                color: "white"
+            }
+
+            MultiPointTouchArea {
+                anchors.fill: parent
+                maximumTouchPoints: 2
+                minimumTouchPoints: 1
+                mouseEnabled: true
+
+                onReleased: {
+                    photoPreview.visible = false;
+                }
+            }
+        }
+    }
+
+    Image {
+        id: clock
+        visible: false
+        anchors.centerIn: parent
+        source: "../assets/clock.png"
+    }
+
+    Timer {
+        id: timer
+        onTriggered: {
+            camera.imageCapture.capture()
+        }
+    }
+   
+    Component {
+        id: dialog
+
+        Dialog {
+            id: options
+            anchors {
+                fill: parent
+            }
+
+            title: i18n.tr("Preferences")
+            text: i18n.tr("Mirror frame color:")
+
+            Button {
+                text: "pink"
+                color: text
+                onClicked: {
+                    settings.frame = color
+                    PopupUtils.close(options)
+                }
+            }
+
+            Button {
+                text: "steelblue"
+                color: text
+                onClicked: {
+                    settings.frame = color
+                    PopupUtils.close(options)
+                }
+            }
+
+            Button {
+                text: "gray"
+                color: text
+                onClicked: {
+                    settings.frame = color
+                    PopupUtils.close(options)
+                }
             }
         }
     }
