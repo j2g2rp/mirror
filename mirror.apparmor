@@ -1,5 +1,9 @@
 {
-    "policy_groups": [ "camera", "video" ],
-    "write_path": [ "@{HOME}/Pictures/mirror.brouits/" ],
+    "policy_groups": [ "camera",
+                       "video",
+                       "picture_files",
+                       "content_exchange_source",
+                       "content_exchange"
+                     ],
     "policy_version": 16.04
 }

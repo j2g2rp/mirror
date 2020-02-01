@@ -23,6 +23,7 @@ import Ubuntu.Components.Popups 1.3
 import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtMultimedia 5.9
+import Ubuntu.Content 1.3
 
 MainView {
     id: root
@@ -32,82 +33,133 @@ MainView {
 
     anchors.fill: parent
 
+    property var exportTransfer
+    property list<ContentItem> snapshotItems
+    property bool exportRequested
+
+    Component {
+        id: snapComponent
+        ContentItem {
+        }
+    }
+
     Settings {
         id: settings
         property alias frame: frame.color
     }
 
-    Page {
+    PageStack {
+        id: pages
         anchors.fill: parent
 
-        header: PageHeader {
-            id: header
-            title: i18n.tr('Mirror')
-            trailingActionBar.actions: [
-                Action {
-                    iconName: "settings"
-                    text: i18n.tr("Settings")
-                    onTriggered: {
-                        PopupUtils.open(dialog)
+        Component.onCompleted: pages.push(main)
+
+        Page {
+            id: main
+            anchors.fill: parent
+            visible: false
+
+            header: PageHeader {
+                id: header
+                title: i18n.tr('Mirror')
+                trailingActionBar.actions: [
+                    Action {
+                        iconName: "settings"
+                        text: i18n.tr("Settings")
+                        onTriggered: {
+                            PopupUtils.open(dialog)
+                        }
+                    }
+                ]
+            }
+
+            Camera {
+                id: camera
+                position: Camera.FrontFace
+                imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
+                exposure {
+                    exposureCompensation: -1.0
+                    exposureMode: Camera.ExposurePortrait
+                }
+
+                flash.mode: Camera.FlashOff
+
+                imageCapture {
+                    onImageCaptured: {
+                        snapshotItems = []
+                        photoPreview.source = preview
+                    }
+                    onImageSaved: {
+                        clock.visible = false
+                        var item = snapComponent.createObject(root, { "url": path })
+                        snapshotItems.push(item)
+                        info.text = i18n.tr("Share your snapshot!")
+                        photoPreview.visible = true
+                    }
+                    onCaptureFailed: {
+                        snapshotItems = []
+                        clock.visible = false
+                        info.text = i18n.tr("Unable to take snapshot!")
+                        photoPreview.visible = true
                     }
                 }
-            ]
-        }
-
-        Camera {
-            id: camera
-            position: Camera.FrontFace
-            imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
-            exposure {
-                exposureCompensation: -1.0
-                exposureMode: Camera.ExposurePortrait
             }
 
-            flash.mode: Camera.FlashOff
-
-            imageCapture {
-                onImageCaptured: {
-                    clock.visible = false
-                    photoPreview.source = preview
-                    info.text = i18n.tr("Snapshot saved in Pictures folder!")
-                    photoPreview.visible = true
-                }
-                onCaptureFailed: {
-                    clock.visible = false
-                    info.text = i18n.tr("Unable to save snapshot!")
-                    photoPreview.visible = true
-                }
-            }
-        }
-
-        Rectangle {
-            id: frame
-            color: "pink"
-            radius: units.gu(2)
-            anchors {
-                top: header.bottom
-                bottom: parent.bottom
-                left: parent.left
-                right: parent.right
-            }
-
-            border {
-                width: units.gu(2)
-                color: frame.color
-            }
-
-            VideoOutput {
-                id: videoOutput
-
+            Rectangle {
+                id: frame
+                color: "pink"
+                radius: units.gu(2)
                 anchors {
-                    margins: units.gu(2)
-                    fill: parent
+                    top: header.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
                 }
 
-                autoOrientation: true
-                fillMode: VideoOutput.PreserveAspectCrop
-                source: camera
-                visible: !photoPreview.visible
+                border {
+                    width: units.gu(2)
+                    color: frame.color
+                }
+
+                VideoOutput {
+                    id: videoOutput
+
+                    anchors {
+                        margins: units.gu(2)
+                        fill: parent
+                    }
+
+                    autoOrientation: true
+                    fillMode: VideoOutput.PreserveAspectCrop
+                    source: camera
+                    visible: !photoPreview.visible
+
+                    MultiPointTouchArea {
+                        anchors.fill: parent
+                        maximumTouchPoints: 2
+                        minimumTouchPoints: 1
+                        mouseEnabled: true
+
+                        onReleased: {
+                            clock.visible = true;
+                            timer.start()
+                        }
+                    }
+                }
+            }
+
+            Image {
+                id: photoPreview
+                anchors.fill: parent
+                fillMode: Image.PreserveAspectCrop
+                visible: false
+
+                Text {
+                    id: info
+                    anchors.centerIn: parent
+                    font.pixelSize: units.gu(3)
+                    color: "white"
+                }
 
                 MultiPointTouchArea {
                     anchors.fill: parent
@@ -116,91 +168,98 @@ MainView {
                     mouseEnabled: true
 
                     onReleased: {
-                        clock.visible = true;
-                        timer.start()
+                        photoPreview.visible = false;
+                        if (root.exportRequested) {
+                            root.exportTransfer.items = snapshotItems
+                            root.exportTransfer.state = ContentTransfer.Charged
+                        } else {
+                            pages.push(sharePage)
+                        }
+                    }
+                }
+            }
+
+            Image {
+                id: clock
+                visible: false
+                anchors.centerIn: parent
+                source: "../assets/clock.png"
+            }
+
+            Timer {
+                id: timer
+                onTriggered: {
+                    camera.imageCapture.capture()
+                }
+            }
+
+            Component {
+                id: dialog
+
+                Dialog {
+                    id: options
+                    anchors {
+                        fill: parent
+                    }
+
+                    title: i18n.tr("Preferences")
+                    text: i18n.tr("Mirror frame color:")
+
+                    Button {
+                        text: "pink"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
+                    }
+
+                    Button {
+                        text: "steelblue"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
+                    }
+
+                    Button {
+                        text: "gray"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
                     }
                 }
             }
         }
 
-        Image {
-            id: photoPreview
-            anchors.fill: parent
-            fillMode: Image.PreserveAspectCrop
+        ContentPeerPicker {
+            id: sharePage
             visible: false
+            contentType: ContentType.Pictures
+            handler: ContentHandler.Share
 
-            Text {
-                id: info
-                anchors.centerIn: parent
-                font.pixelSize: units.gu(3)
-                color: "white"
-            }
-
-            MultiPointTouchArea {
-                anchors.fill: parent
-                maximumTouchPoints: 2
-                minimumTouchPoints: 1
-                mouseEnabled: true
-
-                onReleased: {
-                    photoPreview.visible = false;
+            onPeerSelected: {
+                var transfer = peer.request()
+                if (transfer.state === ContentTransfer.InProgress) {
+                    transfer.items = snapshotItems
+                    transfer.state = ContentTransfer.Charged
                 }
+
+                pages.pop()
             }
+
+            onCancelPressed: pages.pop()
         }
     }
 
-    Image {
-        id: clock
-        visible: false
-        anchors.centerIn: parent
-        source: "../assets/clock.png"
-    }
-
-    Timer {
-        id: timer
-        onTriggered: {
-            camera.imageCapture.capture()
-        }
-    }
-   
-    Component {
-        id: dialog
-
-        Dialog {
-            id: options
-            anchors {
-                fill: parent
-            }
-
-            title: i18n.tr("Preferences")
-            text: i18n.tr("Mirror frame color:")
-
-            Button {
-                text: "pink"
-                color: text
-                onClicked: {
-                    settings.frame = color
-                    PopupUtils.close(options)
-                }
-            }
-
-            Button {
-                text: "steelblue"
-                color: text
-                onClicked: {
-                    settings.frame = color
-                    PopupUtils.close(options)
-                }
-            }
-
-            Button {
-                text: "gray"
-                color: text
-                onClicked: {
-                    settings.frame = color
-                    PopupUtils.close(options)
-                }
-            }
+    Connections {
+        target: ContentHub
+        onExportRequested: {
+            root.exportTransfer = transfer
+            root.exportRequested = true
         }
     }
 }
