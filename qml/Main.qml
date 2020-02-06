@@ -77,28 +77,13 @@ MainView {
             Camera {
                 id: camera
                 position: Camera.FrontFace
+
+                flash.mode: Camera.FlashOff
                 imageProcessing.whiteBalanceMode: CameraImageProcessing.WhiteBalanceAuto
+
                 exposure {
                     exposureCompensation: -1.0
                     exposureMode: Camera.ExposurePortrait
-                }
-
-                flash.mode: Camera.FlashOff
-
-                imageCapture {
-                    onImageCaptured: {
-                        snapshotItems = []
-                        photoPreview.source = preview
-
-                        var path = TempPath.path + '/' + "mirror.jpg";
-                        clock.visible = false
-                        info.text = ""
-                        photoPreview.visible = true
-
-                        photoPreview.grabToImage(function (result) { result.saveToFile(path); info.text = i18n.tr("Share your Snapshot!"); });
-                        var item = snapComponent.createObject(root, { "url": path })
-                        snapshotItems.push(item)
-                    }
                 }
             }
 
@@ -131,13 +116,25 @@ MainView {
                     source: camera
                     visible: !photoPreview.visible
 
-                    MultiPointTouchArea {
-                        anchors.fill: parent
-                        maximumTouchPoints: 2
-                        minimumTouchPoints: 1
-                        mouseEnabled: true
+                    function captureStillImage() {
+                        clock.visible = false
+                        info.text = ""
+                        snapshotItems = []
+                        videoOutput.grabToImage(function (result) {
+                            var path = TempPath.path + "/mirror.jpg"
+                            result.saveToFile(path)
+                            photoPreview.source = result.url
+                            info.text = i18n.tr("Share your Snapshot!")
+                            photoPreview.visible = true
+                            var item = snapComponent.createObject(root, { "url": path })
+                            snapshotItems.push(item)
+                        });
+                    }
 
-                        onReleased: {
+                    MouseArea {
+                        anchors.fill: parent
+
+                        onClicked: {
                             clock.visible = true;
                             timer.start()
                         }
@@ -159,13 +156,10 @@ MainView {
                     color: "white"
                 }
 
-                MultiPointTouchArea {
+                MouseArea {
                     anchors.fill: parent
-                    maximumTouchPoints: 2
-                    minimumTouchPoints: 1
-                    mouseEnabled: true
 
-                    onReleased: {
+                    onClicked: {
                         photoPreview.visible = false;
                         if (root.exportRequested) {
                             root.exportTransfer.items = snapshotItems
@@ -187,7 +181,7 @@ MainView {
             Timer {
                 id: timer
                 onTriggered: {
-                    camera.imageCapture.capture()
+                    videoOutput.captureStillImage()
                 }
             }
 
