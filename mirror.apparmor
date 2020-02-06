@@ -1,7 +1,6 @@
 {
     "policy_groups": [ "camera",
                        "video",
-                       "picture_files",
                        "content_exchange_source",
                        "content_exchange"
                      ],

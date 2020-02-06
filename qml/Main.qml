@@ -24,6 +24,7 @@ import QtQuick.Layouts 1.3
 import Qt.labs.settings 1.0
 import QtMultimedia 5.9
 import Ubuntu.Content 1.3
+import TempPath 1.0
 
 MainView {
     id: root
@@ -88,19 +89,15 @@ MainView {
                     onImageCaptured: {
                         snapshotItems = []
                         photoPreview.source = preview
-                    }
-                    onImageSaved: {
+
+                        var path = TempPath.path + '/' + "mirror.jpg";
                         clock.visible = false
+                        info.text = ""
+                        photoPreview.visible = true
+
+                        photoPreview.grabToImage(function (result) { result.saveToFile(path); info.text = i18n.tr("Share your Snapshot!"); });
                         var item = snapComponent.createObject(root, { "url": path })
                         snapshotItems.push(item)
-                        info.text = i18n.tr("Share your snapshot!")
-                        photoPreview.visible = true
-                    }
-                    onCaptureFailed: {
-                        snapshotItems = []
-                        clock.visible = false
-                        info.text = i18n.tr("Unable to save snapshot!")
-                        photoPreview.visible = true
                     }
                 }
             }
@@ -158,6 +155,7 @@ MainView {
                     id: info
                     anchors.centerIn: parent
                     font.pixelSize: units.gu(3)
+                    font.bold: true
                     color: "white"
                 }
 
