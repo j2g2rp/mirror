@@ -47,6 +47,8 @@ MainView {
     Settings {
         id: settings
         property alias frame: frame.color
+        property bool snapframe
+        property alias unmirror: photoPreview.mirror
     }
 
     PageStack {
@@ -116,21 +118,6 @@ MainView {
                     source: camera
                     visible: !photoPreview.visible
 
-                    function captureStillImage() {
-                        clock.visible = false
-                        info.text = ""
-                        snapshotItems = []
-                        videoOutput.grabToImage(function (result) {
-                            var path = TempPath.path + "/mirror.jpg"
-                            result.saveToFile(path)
-                            photoPreview.source = result.url
-                            info.text = i18n.tr("Share your Snapshot!")
-                            photoPreview.visible = true
-                            var item = snapComponent.createObject(root, { "url": path })
-                            snapshotItems.push(item)
-                        });
-                    }
-
                     MouseArea {
                         anchors.fill: parent
 
@@ -140,17 +127,45 @@ MainView {
                         }
                     }
                 }
+
+                function captureStillImage() {
+                    clock.visible = false
+                    info.text = ""
+                    snapshotItems = []
+                    var snap = settings.snapframe ? frame : videoOutput
+                    snap.grabToImage(function (result) {
+                        var path = TempPath.path + "/mirror.jpg"
+                        result.saveToFile(path)
+                        photoPreview.source = result.url
+                        info.text = i18n.tr("Share your Snapshot!")
+                        photoPreview.visible = true
+                        var item = snapComponent.createObject(root, { "url": path })
+                        snapshotItems.push(item)
+                    });
+                }
             }
 
             Image {
                 id: photoPreview
-                anchors.fill: parent
+
+                anchors {
+                    top: header.bottom
+                    bottom: parent.bottom
+                    left: parent.left
+                    right: parent.right
+                }
+
                 fillMode: Image.PreserveAspectCrop
                 visible: false
 
                 Text {
                     id: info
-                    anchors.centerIn: parent
+                    anchors {
+                        horizontalCenter: parent.horizontalCenter
+                        bottom: parent.bottom
+                        bottomMargin: units.gu(9)
+                    }
+
                     font.pixelSize: units.gu(3)
                     font.bold: true
                     color: "white"
@@ -174,14 +189,29 @@ MainView {
             Image {
                 id: clock
                 visible: false
-                anchors.centerIn: parent
+
+                anchors {
+                    horizontalCenter: parent.horizontalCenter
+                    bottom: parent.bottom
+                    bottomMargin: units.gu(9)
+                }
+
                 source: "../assets/clock.png"
+                fillMode: Image.Pad
+
+                MouseArea {
+                    anchors.fill: parent
+                    onClicked: {
+                        timer.stop()
+                        clock.visible = false
+                    }
+                }
             }
 
             Timer {
                 id: timer
                 onTriggered: {
-                    videoOutput.captureStillImage()
+                    frame.captureStillImage()
                 }
             }
 
@@ -195,7 +225,33 @@ MainView {
                     }
 
                     title: i18n.tr("Preferences")
-                    text: i18n.tr("Mirror frame color:")
+
+                    Label {
+                        anchors.right: parent.right
+                        text: i18n.tr("Include frame into snap")
+                        Switch {
+                            anchors.right: parent.right
+                            checked: settings.snapframe
+
+                            onCheckedChanged: settings.snapframe = checked
+                        }
+                    }
+
+                    Label {
+                        anchors.right: parent.right
+                        text: i18n.tr("Unmirror snapshot")
+                        Switch {
+                            anchors.right: parent.right
+                            checked: settings.unmirror
+
+                            onCheckedChanged: settings.unmirror = checked
+                        }
+                    }
+
+                    Label {
+                        anchors.right: parent.right
+                        text: i18n.tr("Choose a frame color")
+                    }
 
                     Button {
                         text: "pink"
@@ -217,6 +273,33 @@ MainView {
 
                     Button {
                         text: "gray"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
+                    }
+
+                    Button {
+                        text: "salmon"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
+                    }
+
+                    Button {
+                        text: "violet"
+                        color: text
+                        onClicked: {
+                            settings.frame = color
+                            PopupUtils.close(options)
+                        }
+                    }
+
+                    Button {
+                        text: "seagreen"
                         color: text
                         onClicked: {
                             settings.frame = color
