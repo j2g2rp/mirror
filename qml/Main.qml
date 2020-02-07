@@ -175,12 +175,41 @@ MainView {
                     anchors.fill: parent
 
                     onClicked: {
-                        photoPreview.visible = false;
-                        if (root.exportRequested) {
-                            root.exportTransfer.items = snapshotItems
-                            root.exportTransfer.state = ContentTransfer.Charged
-                        } else if (snapshotItems.length > 0) {
-                            pages.push(sharePage)
+                        PopupUtils.open(yesno)
+                    }
+                }
+            }
+
+            Component {
+                id: yesno
+                Dialog {
+                    id: confirmation
+                    anchors {
+                        fill: parent
+                    }
+
+                    title: i18n.tr("Confirm")
+                    text: i18n.tr("Share this snapshot?")
+
+                    Button {
+                        text: "yes"
+                        onClicked: {
+                            PopupUtils.close(confirmation)
+                            photoPreview.visible = false
+                            if (root.exportRequested) {
+                                root.exportTransfer.items = snapshotItems
+                                    root.exportTransfer.state = ContentTransfer.Charged
+                            } else if (snapshotItems.length > 0) {
+                                pages.push(sharePage)
+                            }
+                        }
+                    }
+
+                    Button {
+                        text: "no"
+                        onClicked: {
+                            PopupUtils.close(confirmation)
+                            photoPreview.visible = false
                         }
                     }
                 }
