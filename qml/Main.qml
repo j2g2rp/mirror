@@ -192,7 +192,7 @@ MainView {
                     text: i18n.tr("Share this snapshot?")
 
                     Button {
-                        text: "yes"
+                        text: i18n.tr("yes")
                         onClicked: {
                             PopupUtils.close(confirmation)
                             photoPreview.visible = false
@@ -206,7 +206,7 @@ MainView {
                     }
 
                     Button {
-                        text: "no"
+                        text: i18n.tr("no")
                         onClicked: {
                             PopupUtils.close(confirmation)
                             photoPreview.visible = false
