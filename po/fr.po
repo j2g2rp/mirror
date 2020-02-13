@@ -1,0 +1,53 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the mirror.brouits package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: mirror.brouits\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-07 13:02+0000\n"
+"PO-Revision-Date: 2020-02-11 21:30+0000\n"
+"Last-Translator: Anne017 <anneonyme017@openmailbox.org>\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../qml/Main.qml:67 mirror.desktop.in.h:1
+msgid "Mirror"
+msgstr "Miroir"
+
+#: ../qml/Main.qml:71
+msgid "Settings"
+msgstr "Paramètres"
+
+#: ../qml/Main.qml:140
+msgid "Share your Snapshot!"
+msgstr "Partagez vos clichés !"
+
+#: ../qml/Main.qml:191
+msgid "Confirm"
+msgstr "Confirmer"
+
+#: ../qml/Main.qml:192
+msgid "Share this snapshot?"
+msgstr "Partager ce cliché ?"
+
+#: ../qml/Main.qml:256
+msgid "Preferences"
+msgstr "Préférences"
+
+#: ../qml/Main.qml:260
+msgid "Include frame into snap"
+msgstr "Inclure un cadre au cliché"
+
+#: ../qml/Main.qml:271
+msgid "Unmirror snapshot"
+msgstr "Inverser le cliché"
+
+#: ../qml/Main.qml:282
+msgid "Choose a frame color"
+msgstr "Choisir une couleur de cadre"
