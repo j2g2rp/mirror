@@ -36,6 +36,14 @@ msgstr "Confirmer"
 msgid "Share this snapshot?"
 msgstr "Partager ce cliché ?"
 
+#: ../qml/Main.qml:195
+msgid "yes"
+msgstr "oui"
+
+#: ../qml/Main.qml:209
+msgid "no"
+msgstr "non"
+
 #: ../qml/Main.qml:256
 msgid "Preferences"
 msgstr "Préférences"
