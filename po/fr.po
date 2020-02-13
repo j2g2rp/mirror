@@ -1,7 +1,8 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# FRENCH TRANSLATION FOR "MIRROR".
+# Copyright (C) 2020 Benoît Rouits
 # This file is distributed under the same license as the mirror.brouits package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# "Anne017" <anneonyme017@openmailbox.org>, 2020.
+# "Benoît Rouits" <brouits@free.fr>, 2020.
 #
 #, fuzzy
 msgid ""
@@ -26,7 +27,7 @@ msgstr "Paramètres"
 
 #: ../qml/Main.qml:140
 msgid "Share your Snapshot!"
-msgstr "Partagez vos clichés !"
+msgstr "Partagez votre cliché !"
 
 #: ../qml/Main.qml:191
 msgid "Confirm"
@@ -37,12 +38,12 @@ msgid "Share this snapshot?"
 msgstr "Partager ce cliché ?"
 
 #: ../qml/Main.qml:195
-msgid "yes"
-msgstr "oui"
+msgid "Yes"
+msgstr "Oui"
 
 #: ../qml/Main.qml:209
-msgid "no"
-msgstr "non"
+msgid "No"
+msgstr "Non"
 
 #: ../qml/Main.qml:256
 msgid "Preferences"
@@ -50,7 +51,7 @@ msgstr "Préférences"
 
 #: ../qml/Main.qml:260
 msgid "Include frame into snap"
-msgstr "Inclure un cadre au cliché"
+msgstr "Inclure le cadre au cliché"
 
 #: ../qml/Main.qml:271
 msgid "Unmirror snapshot"
