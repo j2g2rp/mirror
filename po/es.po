@@ -1,0 +1,63 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the mirror.brouits package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: mirror.brouits\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-02-13 17:17+0000\n"
+"PO-Revision-Date: 2020-03-01 21:45+0100\n"
+"Language-Team:UBports Spanish Team \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 2.2.4\n"
+"Last-Translator: \n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Language: es\n"
+
+#: ../qml/Main.qml:67 mirror.desktop.in.h:1
+msgid "Mirror"
+msgstr "Mirror"
+
+#: ../qml/Main.qml:71
+msgid "Settings"
+msgstr "Ajustes"
+
+#: ../qml/Main.qml:140
+msgid "Share your Snapshot!"
+msgstr "Â¡Comparte tu instantÃ¡nea!"
+
+#: ../qml/Main.qml:191
+msgid "Confirm"
+msgstr "Confirmar"
+
+#: ../qml/Main.qml:192
+msgid "Share this snapshot?"
+msgstr "Â¿Compartir esta instantÃ¡nea?"
+
+#: ../qml/Main.qml:195
+msgid "Yes"
+msgstr "Si"
+
+#: ../qml/Main.qml:209
+msgid "No"
+msgstr "No"
+
+#: ../qml/Main.qml:256
+msgid "Preferences"
+msgstr "Preferencias"
+
+#: ../qml/Main.qml:260
+msgid "Include frame into snap"
+msgstr "Incluir un marco en la foto"
+
+#: ../qml/Main.qml:271
+msgid "Unmirror snapshot"
+msgstr "No reflejar instantÃ¡nea"
+
+#: ../qml/Main.qml:282
+msgid "Choose a frame color"
+msgstr "Seleccionar un color de marco"
